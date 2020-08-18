@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wall #-}
+
 module Main where
 
 -- Convert an Integer to a list of its digits
@@ -28,6 +30,16 @@ validate :: Integer -> Bool
 validate number = total `mod` 10 == 0
   where total = (sumDigits . doubleEveryOther . toDigits) number
 
+-- Calculate Towers of Hanoi moves
+type Peg = String
+type Move = (Peg, Peg)
+hanoi :: Integer -> Peg -> Peg -> Peg -> [Move]
+hanoi 1 source target _ = [(source, target)]
+hanoi n source target tmp =
+  (hanoi (n - 1) source tmp target) ++
+  [(source, target)] ++
+  (hanoi (n - 1) tmp target source)
+
 main :: IO ()
 main = do
   print (toDigits 1234)
@@ -35,3 +47,4 @@ main = do
   print (doubleEveryOther [1,2,3,4])
   print (sumDigits [1,2,3,11,22,33])
   print (validate 4012888888881881)
+  print (hanoi 2 "a" "b" "c")
